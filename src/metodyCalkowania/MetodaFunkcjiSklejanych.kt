@@ -1,5 +1,6 @@
 package metodyCalkowania
 
+import GaussEliminacja
 import MacierzRzadka.MacierzRzadka
 
 class MetodaFunkcjiSklejanych {
@@ -19,7 +20,7 @@ class MetodaFunkcjiSklejanych {
     val rownaniaDoZera = ArrayList<ArrayList<Double>>()
     val wynikowe = ArrayList<Double>()
 
-
+    val parametryFunkcjiSklejanych = ArrayList<ArrayList<Double>>()
 
     public fun dodajParametry(x: Double, y: Double) {
         punktyFunkcji.add(Punkt(x,y))
@@ -130,10 +131,11 @@ class MetodaFunkcjiSklejanych {
         przesuniecie = 0
         //wpisanie rownan x2
         var i = 0
-        while (i <= rownaniax2.size / 2) {
+        while (i <= rownaniax2.size - 2) {
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie, rownaniax2[i][0])
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie + 1, rownaniax2[i][1])
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie + 2, rownaniax2[i][2])
+            println("wstawiam ${rownaniax2[i][0]} i: $i")
 
             przesuniecie += 4
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie, rownaniax2[i + 1][0])
@@ -148,13 +150,16 @@ class MetodaFunkcjiSklejanych {
         przesuniecie = 0
         //wpisanie rownan x1
         i = 0
-        while (i <= rownaniax1.size / 2) {
+        while (i <= rownaniax1.size - 2) {
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie, rownaniax1[i][0])
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie + 1, rownaniax1[i][1])
 
             przesuniecie += 4
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie, rownaniax1[i + 1][0])
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie + 1, rownaniax1[i + 1][1])
+
+            println(macierzRzadka!!.pobierzWartosc(wiersz, przesuniecie))
+            println(macierzRzadka!!.pobierzWartosc(wiersz, przesuniecie + 1))
 
             i += 2
             wiersz+=1
@@ -169,33 +174,45 @@ class MetodaFunkcjiSklejanych {
         macierzRzadka!!.ustawWartosc(wiersz + 1, rozmiarMacierzy - 3, 2.0)
     }
 
+    fun obliczParametryFunkcjiSklejanych() {
+        val rozwiazanie = GaussEliminacja.rozwiaz(macierzRzadka, wynikowe.toDoubleArray())
+
+        for (i in 0 until rozwiazanie.size step 4) {
+            val parametryLista = ArrayList<Double>()
+
+            parametryLista.add(rozwiazanie[i])
+            parametryLista.add(rozwiazanie[i +1])
+            parametryLista.add(rozwiazanie[i+2])
+            parametryLista.add(rozwiazanie[i+3])
+
+            parametryFunkcjiSklejanych.add(parametryLista)
+        }
+    }
+
+
+
 
 
     override fun toString(): String {
-        val stringBuilder = StringBuilder()
-        stringBuilder.appendln("MetodaFunkcjiSklejanych:")
-        stringBuilder.appendln("Ilość równań x^3: $iloscRownanx3")
-        stringBuilder.appendln("Ilość równań x^2: $iloscRownanx2")
-        stringBuilder.appendln("Ilość równań x^1: $iloscRownanx1")
-        stringBuilder.appendln("Punkty funkcji:")
-        for (punkt in punktyFunkcji) {
-            stringBuilder.appendln("x: ${punkt.x}, y: ${punkt.y}")
-        }
-        stringBuilder.appendln("Równania x^3:")
-        for (rownanie in rownaniax3) {
-            stringBuilder.appendln(rownanie.joinToString(prefix = "[", postfix = "]", separator = ", "))
-        }
-        stringBuilder.appendln("Równania x^2:")
-        for (rownanie in rownaniax2) {
-            stringBuilder.appendln(rownanie.joinToString(prefix = "[", postfix = "]", separator = ", "))
-        }
-        stringBuilder.appendln("Równania x^1:")
-        for (rownanie in rownaniax1) {
-            stringBuilder.appendln(rownanie.joinToString(prefix = "[", postfix = "]", separator = ", "))
-        }
-        stringBuilder.appendln("Wynikowe:")
-        stringBuilder.appendln(wynikowe.joinToString(prefix = "[", postfix = "]", separator = ", "))
-        return stringBuilder.toString()
+        val sb = StringBuilder()
+        sb.appendln("MetodaFunkcjiSklejanych:")
+        sb.appendln("Ilość równań x^3: $iloscRownanx3")
+        sb.appendln("Ilość równań x^2: $iloscRownanx2")
+        sb.appendln("Ilość równań x^1: $iloscRownanx1")
+        sb.appendln("Punkty funkcji:")
+        punktyFunkcji.forEach { sb.appendln("x: ${it.x}, y: ${it.y}") }
+        sb.appendln("Równania x^3:")
+        rownaniax3.forEach { sb.appendln(it.joinToString(prefix = "[", postfix = "]", separator = ", ")) }
+        sb.appendln("Równania x^2:")
+        rownaniax2.forEach { sb.appendln(it.joinToString(prefix = "[", postfix = "]", separator = ", ")) }
+        sb.appendln("Równania x^1:")
+        rownaniax1.forEach { sb.appendln(it.joinToString(prefix = "[", postfix = "]", separator = ", ")) }
+        sb.appendln("Wynikowe:")
+        sb.appendln(wynikowe.joinToString(prefix = "[", postfix = "]", separator = ", "))
+        sb.appendln("Parametry funkcji sklejanych:")
+        parametryFunkcjiSklejanych.forEach { sb.appendln(it.joinToString(prefix = "[", postfix = "]", separator = ", ")) }
+        return sb.toString()
     }
+
 
 }

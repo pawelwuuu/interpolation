@@ -1,4 +1,3 @@
-import MacierzRzadka.WyjatekMacierz;
 import MacierzRzadka.MacierzRzadka;
 
 import java.util.ArrayList;

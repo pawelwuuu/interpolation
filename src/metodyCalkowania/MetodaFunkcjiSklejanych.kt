@@ -3,6 +3,7 @@ package metodyCalkowania
 import GaussEliminacja
 import MacierzRzadka.MacierzRzadka
 
+
 class MetodaFunkcjiSklejanych {
     class Punkt(val x: Double, val y: Double)
 
@@ -135,7 +136,6 @@ class MetodaFunkcjiSklejanych {
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie, rownaniax2[i][0])
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie + 1, rownaniax2[i][1])
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie + 2, rownaniax2[i][2])
-            println("wstawiam ${rownaniax2[i][0]} i: $i")
 
             przesuniecie += 4
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie, rownaniax2[i + 1][0])
@@ -157,9 +157,6 @@ class MetodaFunkcjiSklejanych {
             przesuniecie += 4
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie, rownaniax1[i + 1][0])
             macierzRzadka!!.ustawWartosc(wiersz, przesuniecie + 1, rownaniax1[i + 1][1])
-
-            println(macierzRzadka!!.pobierzWartosc(wiersz, przesuniecie))
-            println(macierzRzadka!!.pobierzWartosc(wiersz, przesuniecie + 1))
 
             i += 2
             wiersz+=1
@@ -187,8 +184,47 @@ class MetodaFunkcjiSklejanych {
 
             parametryFunkcjiSklejanych.add(parametryLista)
         }
+        println(rozwiazanie)
     }
 
+    fun obliczWartoscX(x: Double): Double {
+        var numerFunkcji = -1
+        for(i in 0 until punktyFunkcji.size-1){
+            if (x >= punktyFunkcji[i].x && x <= punktyFunkcji[i+1].x){
+                numerFunkcji = i
+                break
+            }
+        }
+        val parametryFunkcji = parametryFunkcjiSklejanych[numerFunkcji]
+
+        return parametryFunkcji[0] * x*x*x + parametryFunkcji[1] * x*x + parametryFunkcji[2] * x + parametryFunkcji[3]
+    }
+
+    fun obliczPole(dokladnosc: Double, xp: Double, xk: Double, funkcja: (Double) -> Double) {
+        var punkt = xp
+        while (punkt <= xk) {
+            dodajParametry(punkt, funkcja(punkt))
+            punkt += 1/dokladnosc
+
+        }
+
+
+        obliczRownaniax3()
+        obliczRownaniax2()
+        obliczRownaniax1()
+        obliczRownaniax1DoZeraDla1iN()
+        stworzMacierz()
+
+
+        println(5)
+
+        obliczParametryFunkcjiSklejanych()
+        println(1)
+
+
+
+//        println(parametryFunkcjiSklejanych)
+    }
 
 
 
@@ -213,6 +249,5 @@ class MetodaFunkcjiSklejanych {
         parametryFunkcjiSklejanych.forEach { sb.appendln(it.joinToString(prefix = "[", postfix = "]", separator = ", ")) }
         return sb.toString()
     }
-
 
 }

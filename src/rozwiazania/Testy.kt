@@ -1,6 +1,7 @@
 package rozwiazania
 
 import metodyCalkowania.*
+import zapiszDoPliku
 import kotlin.math.abs
 import kotlin.math.sin
 
@@ -23,6 +24,7 @@ class Testy {
     )
 
     fun testFunkcji() {
+        var logTestu = "algorytm;funkcja;dokladnosc;blad\n"
         val iterator = fucnkje.iterator()
         val dokladnosci = arrayListOf(1000.0, 100000.0, 1000000.0)
 
@@ -31,18 +33,21 @@ class Testy {
                 val r1 = MetodaProstokatow(dokladnosc, xp, xk, funkcja).obliczPole()
                 val r2 = MetodaTrapezow(dokladnosc, xp, xk, funkcja).obliczPole()
                 val r3 = MetodaSimpsona(dokladnosc, xp, xk, funkcja).obliczPole()
-                val r4 = AlgorytmCSI().obliczPole(xp, xk, 200, dokladnosc, funkcja)
+                val r4 = AlgorytmCSI().obliczPole(xp, xk, 600, dokladnosc, funkcja)
 
                 println("Błąd A1 dla funkcji ${index+1} dokladnosc $dokladnosc: ${abs(wyniki[index] - r1)}")
                 println("Błąd A2 dla funkcji ${index+1} dokladnosc $dokladnosc: ${abs(wyniki[index] - r2)}")
                 println("Błąd A3 dla funkcji ${index+1} dokladnosc $dokladnosc: ${abs(wyniki[index] - r3)}")
                 println("Błąd A4 dla funkcji ${index+1} dokladnosc $dokladnosc: ${abs(wyniki[index] - r4)}")
                 println("--------------------------------")
+                logTestu += "A1;${index+1};$dokladnosc;${abs(wyniki[index] - r1)}\n"
+                logTestu += "A2;${index+1};$dokladnosc;${abs(wyniki[index] - r2)}\n"
+                logTestu += "A3;${index+1};$dokladnosc;${abs(wyniki[index] - r3)}\n"
+                logTestu += "A4;${index+1};$dokladnosc;${abs(wyniki[index] - r4)}\n"
             }
-            println("________________________________")
+            println("***************************")
         }
+
+        zapiszDoPliku("testFunkcji", logTestu)
     }
-
-
-
 }

@@ -18,5 +18,4 @@ class MetodaProstokatow(val dokladnosc: Double, val xp: Double, val xk: Double, 
 
         return wynik * dx
     }
-
 }

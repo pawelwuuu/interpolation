@@ -4,6 +4,7 @@ import rozwiazania.DlugoscKrzywej
 import rozwiazania.Pola
 import zapiszDoPliku
 import kotlin.math.PI
+import kotlin.random.Random
 
 fun obliczHipoteze123() {
     var str = ""
@@ -28,4 +29,20 @@ fun obliczHipoteze123() {
     }
     zapiszDoPliku("hipotezaObwody", str)
 
+}
+
+fun hipoteza2() {
+    for (i in 0..10) {
+        val a = Random.nextDouble(0.0, 10.0) // Generuje losową liczbę Double od 0.0 do 10.0
+        val b = Random.nextDouble(0.0, 10.0) // Generuje losową liczbę Double od 0.0 do 10.0
+        val wyniki = Pola().obliczPoleElipsy(a, b)
+
+        val poleElipsy = PI * a * b
+
+        val skorygowaneWyniki = wyniki.map { wynik ->
+            wynik - poleElipsy
+        }
+
+        println("a: $a b: $b  Wyniki:  $skorygowaneWyniki")
+    }
 }

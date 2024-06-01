@@ -11,7 +11,7 @@ import kotlin.math.sin
 
 class Pola {
     var dx = 100000.0
-    val iloscPrzedzialow = 500
+    val iloscPrzedzialow = 3
     fun obliczPoleKola() : ArrayList<Double> {
 
 //        polowa kola
@@ -122,6 +122,40 @@ class Pola {
         }
 
         return str
+    }
+
+    fun policzBledyKola() {
+        val bledy = ArrayList<Double>()
+        val wyniki = obliczPoleKola()
+
+        wyniki.forEach {
+            bledy.add(PI - it)
+        }
+
+        println(bledy)
+    }
+
+    fun poleElipsy(a: Double,b: Double) : Double {
+        return a*b* PI
+    }
+
+    fun policzBledyElipsy() {
+        val bledy = ArrayList<List<Double>>()
+
+        val parametryElipsy: ArrayList<Pair<Double, Double>> = arrayListOf(
+            Pair(1.0, 1.0),
+            Pair(3.0, 2.0),
+            Pair(5.0, 7.0),
+            Pair(15.0, 6.0),
+        )
+
+        for (parametry in parametryElipsy) {
+            bledy.add(obliczPoleElipsy(parametry.first, parametry.second).map {
+               abs(it - poleElipsy(parametry.first, parametry.second))
+            })
+        }
+
+        println(bledy)
     }
 
     fun zapiszWynikiDoPlikow() {

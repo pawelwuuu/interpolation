@@ -6,10 +6,12 @@ import metodyCalkowania.MetodaSimpsona
 import metodyCalkowania.MetodaTrapezow
 import rozwiazania.NumericalIntegration.rectangleRule
 import zapiszDoPliku
+import kotlin.math.PI
+import kotlin.math.abs
 
 class DlugoscKrzywej {
-    var dx = 10000.0
-    val iloscPrzedzialow = 100
+    var dx = 100000.0
+    val iloscPrzedzialow = 3
 
     // Funkcja obliczająca pochodną numerycznie
     fun numericalDerivative(f: (Double) -> Double, x: Double, h: Double): Double {
@@ -44,7 +46,7 @@ class DlugoscKrzywej {
 
     fun dlugoscKrzywejElipsy(a: Double, f: (Double) -> Double): ArrayList<Double> {
         // Obliczanie pochodnej funkcji f
-        val derivative = { x: Double -> numericalDerivative(f, x, 1e-10) }
+        val derivative = { x: Double -> numericalDerivative(f, x, 1e-16) }
         // Funkcja podcałkowa sqrt(1 + (f'(x))^2)
         val integrand = { x: Double -> kotlin.math.sqrt(1 + Math.pow(derivative(x), 2.0)) }
 
@@ -73,10 +75,8 @@ class DlugoscKrzywej {
         // 1. Obwód koła o promieniu 1, używając parametrów (x = cos(t), y = sin(t))
         val circleIntegrand = { t: Double -> kotlin.math.sqrt(kotlin.math.abs(r - (t * t))) }
         val circleCircumference = dlugoscKrzywejKola(circleIntegrand)
+        println(circleCircumference.map { abs(it - 2*PI) })
         println(circleCircumference)
-
-
-
 
 //
         val a = 1.0 // półoś "a"

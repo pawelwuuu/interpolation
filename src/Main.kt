@@ -18,9 +18,10 @@ fun main() {
 
 
 
-//    DlugoscKrzywej().main()
+    DlugoscKrzywej().main()
 
 //    obliczHipoteze123()
-    DlugoscKrzywej().main()
+//    Pola().policzBledyElipsy()
+
 
 }

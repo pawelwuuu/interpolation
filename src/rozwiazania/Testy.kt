@@ -7,7 +7,7 @@ import kotlin.math.sin
 
 class Testy {
     val xp = 0.0
-    val xk = 2.0
+    val xk = 1.0
 
     val funkcja1: (Double) -> Double = { it * it }
     val funkcja2: (Double) -> Double = { it*7 + 4 }

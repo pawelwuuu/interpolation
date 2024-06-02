@@ -1,9 +1,9 @@
-import metodyCalkowania.*
-import rozwiazania.Pola
-import rozwiazania.Testy
-import kotlin.math.sin
+
+import project1.Hipoteza5
 
 fun main() {
-    Pola().zapiszWynikiDoPlikow()
+    val hipoteza5 = Hipoteza5()
+    hipoteza5.hipoteza5()
+    //Pola().zapiszWynikiDoPlikow()
 
 }

@@ -1,42 +1,111 @@
 package rozwiazania
 
+import metodyCalkowania.AlgorytmCSI
+import metodyCalkowania.MetodaProstokatow
 import metodyCalkowania.MetodaSimpsona
+import metodyCalkowania.MetodaTrapezow
 import zapiszDoPliku
+import kotlin.math.PI
+import kotlin.math.abs
 import kotlin.math.sin
 
 class Pola {
-    val dx = 100000.0
-    fun obliczPoleKola() : Double {
+    var dx = 100000.0
+    val iloscPrzedzialow = 3
+    fun obliczPoleKola() : ArrayList<Double> {
+
 //        polowa kola
         val f: (Double) -> (Double) = { Math.sqrt(-1 * it*it + 2 * it) }
 
-        val pole = MetodaSimpsona(dx ,0.0,2.0,f).obliczPole()
+        val wyniki = ArrayList<Double>()
+        wyniki.add(
+            MetodaProstokatow(dx, 0.0, 2.0, f).obliczPole() * 2
+        )
+        wyniki.add(
+            MetodaTrapezow(dx, 0.0, 2.0, f).obliczPole() * 2
+        )
 
-        return pole * 2
+        wyniki.add(
+            MetodaSimpsona(dx ,0.0,2.0,f).obliczPole() * 2
+        )
+
+        wyniki.add(
+            AlgorytmCSI().obliczPole(0.0, 2.0, iloscPrzedzialow, dx, f) * 2
+        )
+
+        return wyniki
     }
 
-    fun obliczPoleParaboli() : Double {
+    fun obliczPoleParaboli() : ArrayList<Double> {
         val f: (Double) -> (Double) = {
-            -1*it*it + 2*it + 3
+            it*it + 2*it + 3
         }
 
-        return MetodaSimpsona(dx, 0.0,1.0, f).obliczPole()
+        val wyniki = ArrayList<Double>()
+        wyniki.add(
+            MetodaProstokatow(dx, 0.0, 1.0, f).obliczPole()
+        )
+        wyniki.add(
+            MetodaTrapezow(dx, 0.0, 1.0, f).obliczPole()
+        )
+
+        wyniki.add(
+            MetodaSimpsona(dx ,0.0,1.0,f).obliczPole()
+        )
+
+        wyniki.add(
+            AlgorytmCSI().obliczPole(0.0, 1.0, iloscPrzedzialow, dx, f)
+        )
+
+        return wyniki
     }
 
-    fun obliczPoleElipsy(a : Double, b : Double) : Double {
+    fun obliczPoleElipsy(a : Double, b : Double) : ArrayList<Double> {
         val f: (Double) -> (Double) = { x ->
-            Math.sqrt(b*b - (x*x*b*b)/(a*a))
+            Math.sqrt(abs(b*b - (x*x*b*b)/(a*a)))
         }
 
-        return 4 * MetodaSimpsona(dx, 0.0,a, f).obliczPole()
+        val wyniki = ArrayList<Double>()
+        wyniki.add(
+            MetodaProstokatow(dx, 0.0, a, f).obliczPole() * 4
+        )
+        wyniki.add(
+            MetodaTrapezow(dx, 0.0, a, f).obliczPole() * 4
+        )
+
+        wyniki.add(
+            MetodaSimpsona(dx ,0.0,a,f).obliczPole() * 4
+        )
+
+        wyniki.add(
+            AlgorytmCSI().obliczPole(0.0, a, iloscPrzedzialow, dx, f) * 4
+        )
+
+        return wyniki
     }
 
-    fun obliczPoleSinusa() : Double{
+    fun obliczPoleSinusa() : ArrayList<Double>{
         val f: (Double) -> (Double) = {
             sin(it)
         }
 
-        return MetodaSimpsona(dx, 0.0, Math.PI, f).obliczPole()
+        val wyniki = ArrayList<Double>()
+        wyniki.add(
+            MetodaProstokatow(dx, 0.0, PI, f).obliczPole()
+        )
+        wyniki.add(
+            MetodaTrapezow(dx, 0.0, PI, f).obliczPole()
+        )
+
+        wyniki.add(
+            MetodaSimpsona(dx ,0.0,PI,f).obliczPole()
+        )
+
+        wyniki.add(
+            AlgorytmCSI().obliczPole(0.0, PI, iloscPrzedzialow, dx, f)
+        )
+
+        return wyniki
     }
 
     fun obliczPolaElipsy() : String {
@@ -53,6 +122,40 @@ class Pola {
         }
 
         return str
+    }
+
+    fun policzBledyKola() {
+        val bledy = ArrayList<Double>()
+        val wyniki = obliczPoleKola()
+
+        wyniki.forEach {
+            bledy.add(PI - it)
+        }
+
+        println(bledy)
+    }
+
+    fun poleElipsy(a: Double,b: Double) : Double {
+        return a*b* PI
+    }
+
+    fun policzBledyElipsy() {
+        val bledy = ArrayList<List<Double>>()
+
+        val parametryElipsy: ArrayList<Pair<Double, Double>> = arrayListOf(
+            Pair(1.0, 1.0),
+            Pair(3.0, 2.0),
+            Pair(5.0, 7.0),
+            Pair(15.0, 6.0),
+        )
+
+        for (parametry in parametryElipsy) {
+            bledy.add(obliczPoleElipsy(parametry.first, parametry.second).map {
+               abs(it - poleElipsy(parametry.first, parametry.second))
+            })
+        }
+
+        println(bledy)
     }
 
     fun zapiszWynikiDoPlikow() {

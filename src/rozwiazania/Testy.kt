@@ -7,7 +7,7 @@ import kotlin.math.sin
 
 class Testy {
     val xp = 0.0
-    val xk = 1.0
+    val xk = 2.0
 
     val funkcja1: (Double) -> Double = { it * it }
     val funkcja2: (Double) -> Double = { it*7 + 4 }
@@ -26,24 +26,24 @@ class Testy {
     fun testFunkcji() {
         var logTestu = "algorytm;funkcja;dokladnosc;blad\n"
         val iterator = fucnkje.iterator()
-        val dokladnosci = arrayListOf(1000.0, 100000.0, 1000000.0)
+        val dokladnosci = DoubleArray(8) { Math.pow(10.0, it.toDouble() + 1) }
 
         for ((index, funkcja) in iterator.withIndex()) {
             for (dokladnosc in dokladnosci) {
                 val r1 = MetodaProstokatow(dokladnosc, xp, xk, funkcja).obliczPole()
                 val r2 = MetodaTrapezow(dokladnosc, xp, xk, funkcja).obliczPole()
                 val r3 = MetodaSimpsona(dokladnosc, xp, xk, funkcja).obliczPole()
-                val r4 = AlgorytmCSI().obliczPole(xp, xk, 600, dokladnosc, funkcja)
+//                val r4 = AlgorytmCSI().obliczPole(xp, xk, 20, dokladnosc, funkcja)
 
                 println("Błąd A1 dla funkcji ${index+1} dokladnosc $dokladnosc: ${abs(wyniki[index] - r1)}")
                 println("Błąd A2 dla funkcji ${index+1} dokladnosc $dokladnosc: ${abs(wyniki[index] - r2)}")
                 println("Błąd A3 dla funkcji ${index+1} dokladnosc $dokladnosc: ${abs(wyniki[index] - r3)}")
-                println("Błąd A4 dla funkcji ${index+1} dokladnosc $dokladnosc: ${abs(wyniki[index] - r4)}")
+//                println("Błąd A4 dla funkcji ${index+1} dokladnosc $dokladnosc: ${abs(wyniki[index] - r4)}")
                 println("--------------------------------")
                 logTestu += "A1;${index+1};$dokladnosc;${abs(wyniki[index] - r1)}\n"
                 logTestu += "A2;${index+1};$dokladnosc;${abs(wyniki[index] - r2)}\n"
                 logTestu += "A3;${index+1};$dokladnosc;${abs(wyniki[index] - r3)}\n"
-                logTestu += "A4;${index+1};$dokladnosc;${abs(wyniki[index] - r4)}\n"
+//                logTestu += "A4;${index+1};$dokladnosc;${abs(wyniki[index] - r4)}\n"
             }
             println("***************************")
         }

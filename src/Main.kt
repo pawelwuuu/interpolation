@@ -18,7 +18,7 @@ fun main() {
 
 
 
-    DlugoscKrzywej().main()
+    Testy().testFunkcji()
 
 //    obliczHipoteze123()
 //    Pola().policzBledyElipsy()
